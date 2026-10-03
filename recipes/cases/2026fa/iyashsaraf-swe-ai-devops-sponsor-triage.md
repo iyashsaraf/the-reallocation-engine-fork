@@ -1,7 +1,7 @@
 ---
 status: RUNNABLE-SAMPLE
-todos_open: 2
-last_gate: null
+todos_open: 1
+last_gate: "sample-run adequacy, logs/runs/2026fa-iyashsaraf-1.md (2026-10-01); worked-run attestation at course/2026fa/submissions/iyashsaraf/WORKED-RUN.md"
 attestation: null
 recipe_version: 0.1.0
 ---
@@ -52,8 +52,9 @@ Prefer those local files over external lookup.
 ## Proposed additions
 
 - **SWE/AI/DevOps title classifier** over `top_job_titles_sponsored`
-  [TODO: DEV — closed by `build_roles.py`, this recipe's own script; see Provenance].
-  Justified because the CSV's sponsorship fields are company-level, not
+  — **closed**: implemented in `build_roles.py` (this recipe's own script);
+  `node scripts/conformance.mjs scripts/contrib/2026fa/iyashsaraf-swe-ai-devops-sponsor-triage/`
+  passes; see Provenance. Justified because the CSV's sponsorship fields are company-level, not
   role-level — without a title match, "this company sponsors" cannot become
   "this company sponsors roles like mine."
 - **Live liveness check wiring** (`npm run ats:liveness` against the student's
@@ -124,10 +125,15 @@ regardless of how strong the sponsorship/funding evidence is.
 ### Agent output (machine)
 
 File: `roles.json` (in the prototype's `--out-dir`), shaped per
-`data/examples/ch11-roles.json`. Fields per role: `role_id`, `company`, `title`,
-`sponsorship {p, tier, source}`, `fit {p, source}`, `liveness {factor, source,
-note}`, `timeline {factor, source}`, optional `role_quality` (omitted, not
-zeroed, when no SOC match exists).
+`data/examples/ch11-roles.json` plus two extra context fields this recipe
+adds. Fields per role: `role_id`, `company`, `title`,
+`sponsorship {p, tier, source, approvals, denials}`, `fit {p, source,
+matched_titles}`, `liveness {factor, source, note}`, `timeline {factor,
+source, opt_end_date, hiring_lag_days_assumed, days_remaining}`,
+`funding {latest_funding_stage, latest_funding_date, total_funding, source}`
+(context only — not scored by `role-scorer.mjs`), and optional `role_quality`
+(omitted, not zeroed, when no SOC match exists; `role_quality_status:
+"no-soc-match"` set instead).
 
 ### Human report (markdown)
 
